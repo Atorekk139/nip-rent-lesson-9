@@ -113,3 +113,35 @@ def test_tenant_blacklist_check():
 
     is_blacklisted = manager.check_tenant_blacklist('Jan Pawlak')
     assert is_blacklisted == True
+
+def test_transfer_valid_with_tenant_agreement():
+    manager = Manager(Parameters())
+
+    is_valid = manager.check_transfers_tenant()
+    assert is_valid == True
+
+    manager.transfers.append(Transfer(
+        tenant='non-existing-tenant',
+        date='2025-01-01',
+        settlement_year=2025,
+        settlement_month=1,
+        amount_pln=1000.0,
+        type='rent'
+    ))
+
+    is_valid = manager.check_transfers_tenant()
+    assert is_valid == False
+
+    manager.transfers.pop()
+    manager.transfers.append(Transfer(
+        tenant='tenant-1',
+        date='2025-01-01',
+        settlement_year=1999,
+        settlement_month=1,
+        amount_pln=1000.0,
+        type='rent'
+    ))
+
+    is_valid = manager.check_transfers_tenant()
+    assert is_valid == False
+

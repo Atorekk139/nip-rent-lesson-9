@@ -6,7 +6,7 @@
         "rent_pln": 1500.0,
         "deposit_pln": 3000.0,
         "date_agreement_from": "2024-01-01",
-        "date_agreement_to": "2024-12-31"
+        "date_agreement_to": "2025-12-31"
     },
     "tenant-2": {
         "name": "Adam Kowalski",
@@ -15,7 +15,7 @@
         "rent_pln": 1400.0,
         "deposit_pln": 2900.0,
         "date_agreement_from": "2024-01-01",
-        "date_agreement_to": "2024-12-31"
+        "date_agreement_to": "2025-12-31"
     },
     "tenant-3": {
         "name": "Ewa Adamska",
@@ -24,6 +24,6 @@
         "rent_pln": 1300.0,
         "deposit_pln": 2800.0,
         "date_agreement_from": "2024-01-01",
-        "date_agreement_to": "2024-12-31"
+        "date_agreement_to": "2025-12-31"
     }
 }

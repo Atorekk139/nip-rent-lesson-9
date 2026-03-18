@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.models import Apartment, Bill, Parameters, Tenant, TenantBlacklistEntry, TenantSettlement, Transfer, ApartmentSettlement
 from typing import List, Tuple
 
@@ -123,3 +125,17 @@ class Manager:
     
     def check_tenant_blacklist(self, tenant_name: str) -> bool:
         return any([entry for entry in self.tenants_blacklist if entry.tenant == tenant_name])
+    
+    def check_transfers_tenant(self) -> bool:
+        for transfer in self.transfers:
+            if transfer.tenant not in self.tenants:
+                return False
+            if transfer.settlement_year is not None and transfer.settlement_month is not None:
+                agreement_from = self.tenants[transfer.tenant].date_agreement_from
+                agreement_from = datetime.strptime(agreement_from, "%Y-%m-%d").date()
+                agreement_to = self.tenants[transfer.tenant].date_agreement_to
+                agreement_to = datetime.strptime(agreement_to, "%Y-%m-%d").date()
+                if (transfer.settlement_year < agreement_from.year) or (transfer.settlement_year > agreement_to.year):
+                    return False
+                
+        return True
