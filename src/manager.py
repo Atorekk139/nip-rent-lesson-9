@@ -1,4 +1,4 @@
-from src.models import Apartment, Bill, Parameters, Tenant, TenantSettlement, Transfer, ApartmentSettlement
+from src.models import Apartment, Bill, Parameters, Tenant, TenantBlacklistEntry, TenantSettlement, Transfer, ApartmentSettlement
 from typing import List, Tuple
 
 class Manager:
@@ -9,6 +9,7 @@ class Manager:
         self.tenants = {}
         self.transfers = []
         self.bills = []
+        self.tenants_blacklist = []
        
         self.load_data()
 
@@ -17,6 +18,7 @@ class Manager:
         self.tenants = Tenant.from_json_file(self.parameters.tenants_json_path)
         self.transfers = Transfer.from_json_file(self.parameters.transfers_json_path)
         self.bills = Bill.from_json_file(self.parameters.bills_json_path)
+        self.tenants_blacklist = TenantBlacklistEntry.from_json_file(self.parameters.tenants_blacklist_json_path)
 
     def check_tenants_apartment_keys(self) -> bool:
         for tenant in self.tenants.values():
@@ -118,3 +120,6 @@ class Manager:
             if transfer.amount_pln > self.parameters.max_transfer_pln or transfer.amount_pln < -self.parameters.max_refund_pln:
                 return False
         return True
+    
+    def check_tenant_blacklist(self, tenant_name: str) -> bool:
+        return any([entry for entry in self.tenants_blacklist if entry.tenant == tenant_name])

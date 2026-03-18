@@ -1,4 +1,4 @@
-from src.models import Bill, Parameters, TenantSettlement, ApartmentSettlement, Transfer
+from src.models import Bill, Parameters, TenantBlacklistEntry, TenantSettlement, ApartmentSettlement, Transfer
 from src.manager import Manager
 
 
@@ -99,3 +99,17 @@ def test_min_max_transfer_amount():
     manager.transfers[-1].amount_pln = -3000
     success = manager.check_transfers_amount_range()
     assert success == False
+
+def test_tenant_blacklist_check():
+    manager = Manager(Parameters())
+
+    is_blacklisted = manager.check_tenant_blacklist('Jan Pawlak')
+    assert is_blacklisted == False
+
+    manager.tenants_blacklist.append(TenantBlacklistEntry(
+        tenant='Jan Pawlak',
+        reason='Previous unpaid rent'
+    ))
+
+    is_blacklisted = manager.check_tenant_blacklist('Jan Pawlak')
+    assert is_blacklisted == True
