@@ -10,6 +10,8 @@ class Parameters(BaseModel):
     transfers_json_path: str = 'data/transfers.json'
     bills_json_path: str = 'data/bills.json'
 
+    max_transfer_pln: float = 4500.0
+    max_refund_pln: float = 2500.0
 
 class Room(BaseModel):
     name: str

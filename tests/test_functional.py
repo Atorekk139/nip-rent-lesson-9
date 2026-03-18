@@ -85,3 +85,17 @@ def test_apartment_has_any_bills():
 
     has_bills = manager.has_any_bills('apart-polanka', 2025, 3)
     assert has_bills == False
+
+def test_min_max_transfer_amount():
+    manager = Manager(Parameters())
+
+    success = manager.check_transfers_amount_range()
+    assert success == True
+
+    manager.transfers[-1].amount_pln = 10000
+    success = manager.check_transfers_amount_range()
+    assert success == False
+
+    manager.transfers[-1].amount_pln = -3000
+    success = manager.check_transfers_amount_range()
+    assert success == False

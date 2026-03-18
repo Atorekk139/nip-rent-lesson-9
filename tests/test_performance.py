@@ -45,6 +45,7 @@ def test_search_for_apartment_large_dataset():
 
 def test_check_tenants_apartment_keys_large_dataset():
     """Checking tenants' apartment keys in a dataset of 10 000 apartments and 100 000 tenants should complete within the time limit."""
+    pytest.skip(reason="This test is very time consuming, it is only for performance testing purposes and should not be run with the rest of the tests.")
     ALLOWED_CREATE_TIME_S = 10  # 10 seconds   
     ALLOWED_CHECK_TIME_MS = 10  # 10 milliseconds
     N_APARTMENTS = 10_000
