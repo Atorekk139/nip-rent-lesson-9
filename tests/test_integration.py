@@ -1,4 +1,4 @@
-from src.models import Apartment
+from src.models import Apartment, ApartmentEvent
 from src.manager import Manager
 from src.models import Parameters
 
@@ -30,3 +30,17 @@ def test_if_tenants_have_valid_apartment_keys():
 
     manager.tenants['tenant-1'].apartment = 'invalid-key'
     assert manager.check_tenants_apartment_keys() == False
+
+def test_apartment_events():
+    parameters = Parameters()
+    manager = Manager(parameters)
+    manager.load_additional_data()
+    assert len(manager.apartments) > 0
+    
+    for event in manager.apartment_events:
+        event: ApartmentEvent
+        assert event.apartment in manager.apartments.keys()
+    
+    events = manager.generate_apartment_events_report('apart-polanka')
+    for event in events:
+        assert event.apartment == 'apart-polanka'
