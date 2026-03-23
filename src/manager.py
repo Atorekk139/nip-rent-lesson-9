@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.models import Apartment, Bill, Parameters, Tenant, TenantBlacklistEntry, TenantSettlement, Transfer, ApartmentSettlement
+from src.models import Apartment, Bill, Parameters, Tenant, ApartmentEvent, TenantBlacklistEntry, TenantSettlement, Transfer, ApartmentSettlement
 from typing import List, Tuple
 
 class Manager:
@@ -12,6 +12,7 @@ class Manager:
         self.transfers = []
         self.bills = []
         self.tenants_blacklist = []
+        self.apartment_events = []
        
         self.load_data()
 
@@ -21,6 +22,17 @@ class Manager:
         self.transfers = Transfer.from_json_file(self.parameters.transfers_json_path)
         self.bills = Bill.from_json_file(self.parameters.bills_json_path)
         self.tenants_blacklist = TenantBlacklistEntry.from_json_file(self.parameters.tenants_blacklist_json_path)
+        
+    def load_additional_data(self):
+        self.apartment_events = ApartmentEvent.from_json_file(self.parameters.apartment_events_json_path)
+
+    def generate_apartment_events_report(self, apartment_key: str, only_unsolved: bool = True) -> List[ApartmentEvent]:
+        if apartment_key not in self.apartments:
+            raise ValueError("Apartment key does not exist")
+        return [
+            event for event in self.apartment_events 
+            if event.apartment == apartment_key and (not event.solved or not only_unsolved)
+        ]
 
     def check_tenants_apartment_keys(self) -> bool:
         for tenant in self.tenants.values():
