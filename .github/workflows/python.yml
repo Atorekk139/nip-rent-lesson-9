@@ -1,0 +1,34 @@
+name: NIP Rent
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test with pytest
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4 # Zaktualizowałem do nowszej wersji v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v4 # Zaktualizowałem do poprawnej oficjalnej akcji
+        with:
+          enable-cache: true # Dodatkowy atut: cachowanie przyspieszy kolejne uruchomienia
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Run tests
+        run: uv run pytest tests -v
